@@ -1,4 +1,4 @@
-from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, \
+from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, get_canvas_height, get_canvas_width, \
     SDLK_SPACE, get_time, \
     SDLK_RIGHT, SDLK_LEFT, SDLK_a
 import math
@@ -99,9 +99,19 @@ class AutoRun:
     def do(boy):
         print('AutoRun Do')
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 1 # 테스트를 위해 속도를 줄임
-        if get_time() - boy.auto_run_start_time > 5:
-            boy.state_machine.handle_event(('TIME_OUT', 0))
+        boy.x += boy.dir * 10
+
+        canvas_width = get_canvas_width()
+
+        if boy.x > canvas_width - 15:
+            boy.x = canvas_width - 15
+            boy.dir, boy.action = -1, 0
+        elif boy.x < 15:
+            boy.x = 15
+            boy.dir, boy.action = 1, 1
+
+        if get_time() - boy.auto_run_start_time > 5:           # 5초가 지나면
+            boy.state_machine.handle_event(('TIME_OUT', 0))    # TIME_OUT 이벤트를 발생시킨다
 
     @staticmethod
     def draw(boy):
