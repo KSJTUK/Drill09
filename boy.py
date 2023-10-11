@@ -1,8 +1,10 @@
 from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, \
     SDLK_SPACE, get_time, \
-    SDLK_RIGHT, SDLK_LEFT
+    SDLK_RIGHT, SDLK_LEFT, SDLK_a
 import math
 
+def key_a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -79,6 +81,25 @@ class Run:
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
 
 
+class AutoRun:
+    @staticmethod
+    def enter(boy, e):
+        print('AutoRun Entered')
+    @staticmethod
+    def exit(boy, e):
+        print('AutoRun Exit')
+
+    @staticmethod
+    def do(boy):
+        print('AutoRun Do')
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 5
+
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
+
+
 class Sleep:
     @staticmethod
     def enter(boy, e):
@@ -97,19 +118,21 @@ class Sleep:
     def draw(boy):
         if boy.action == 2:
             boy.image.clip_composite_draw(boy.frame * 100, 200, 100, 100,
-                                        -math.pi / 2, ' ', boy.x + 25, boy.y - 25, 100, 100)
+                                          -math.pi / 2, ' ', boy.x + 25, boy.y - 25, 100, 100)
         else:
             boy.image.clip_composite_draw(boy.frame * 100, 300, 100, 100,
-                                        math.pi / 2, ' ', boy.x - 25, boy.y - 25, 100, 100)
+                                          math.pi / 2, ' ', boy.x - 25, boy.y - 25, 100, 100)
+
 
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
         self.cur_state = IDLE
         self.transitions = {
-            IDLE: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, time_out: Sleep},
+            IDLE: {key_a_down: AutoRun, right_down: Run, left_down: Run, right_up: Run, left_up: Run, time_out: Sleep},
             Run: {right_down: IDLE, left_down: IDLE, right_up: IDLE, left_up: IDLE},
-            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: IDLE}
+            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: IDLE},
+            AutoRun: {time_out: IDLE}
         }
 
     def handle_event(self, e):
