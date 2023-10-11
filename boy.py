@@ -86,7 +86,11 @@ class AutoRun:
     @staticmethod
     def enter(boy, e):
         print('AutoRun Entered')
-        boy.auto_run_start_time = get_time()
+        if boy.action == 2:             # 캐릭터가 왼쪽을 바라보고있으면
+            boy.dir, boy.action = -1, 0 # 왼쪽으로 움직임
+        elif boy.action == 3:           #캐릭터가 오른쪽을 바라보고있으면
+            boy.dir, boy.action = 1, 1  # 오른쪽으로 움직임
+        boy.auto_run_start_time = get_time()  # AutoRun 상태 시작 시간 설정
     @staticmethod
     def exit(boy, e):
         print('AutoRun Exit')
@@ -95,7 +99,7 @@ class AutoRun:
     def do(boy):
         print('AutoRun Do')
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
+        boy.x += boy.dir * 1 # 테스트를 위해 속도를 줄임
         if get_time() - boy.auto_run_start_time > 5:
             boy.state_machine.handle_event(('TIME_OUT', 0))
 
