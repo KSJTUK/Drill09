@@ -49,6 +49,19 @@ class StateMachine:
     def __init__(self, boy):
         self.boy = boy
         self.cur_state = Sleep
+        self.transitions = {
+            Sleep: { space_down: IDLE },
+            IDLE: { time_out: Sleep}
+        }
+
+    def handle_event(self, e):
+        for check_event, next_state in self.transitions[self.cur_state].items():
+            if check_event(e):
+                self.cur_state.exit(self.boy)
+                self.cur_state = next_state
+                self.cur_state.enter(self.boy)
+                return True
+        return False
 
     def start(self):
         self.cur_state.enter(self.boy)
@@ -74,7 +87,7 @@ class Boy:
         self.state_machine.update()
 
     def handle_event(self, event):
-        pass
+        self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
