@@ -97,7 +97,7 @@ class Sleep:
     def draw(boy):
         if boy.action == 2:
             boy.image.clip_composite_draw(boy.frame * 100, 200, 100, 100,
-                                        math.pi / 2, ' ', boy.x - 25, boy.y - 25, 100, 100)
+                                        -math.pi / 2, ' ', boy.x + 25, boy.y - 25, 100, 100)
         else:
             boy.image.clip_composite_draw(boy.frame * 100, 300, 100, 100,
                                         math.pi / 2, ' ', boy.x - 25, boy.y - 25, 100, 100)
