@@ -1,36 +1,48 @@
 from pico2d import load_image
-
+import math
 
 # 원래 객체를 만드는 이유는 객체를 찍어내기 위해서이다
 # 파이썬에서는 객체 생성용이아닌 여러개의 함수를 모아 그룹으로 관리하는 기능이 있다.
 class IDLE:
     @staticmethod
     def enter(boy):
-        print("IDLE Entered")
         pass
 
     @staticmethod
     def exit(boy):
-        print("IDLE Exit")
         pass
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        print("IDLE Do")
-        pass
 
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100,
                              boy.x, boy.y)
+class Sleep:
+    @staticmethod
+    def enter(boy):
         pass
+
+    @staticmethod
+    def exit(boy):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100,
+                             math.pi / 2, ' ', boy.x - 25, boy.y - 25, 100, 100)
 
 
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
-        self.cur_state = IDLE
+        self.cur_state = Sleep
 
     def start(self):
         self.cur_state.enter(self.boy)
