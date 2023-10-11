@@ -16,6 +16,7 @@ class IDLE:
 
     @staticmethod
     def do(boy):
+        boy.frame = (boy.frame + 1) % 8
         print("IDLE Do")
         pass
 
