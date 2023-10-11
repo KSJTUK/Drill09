@@ -85,7 +85,6 @@ class Run:
 class AutoRun:
     @staticmethod
     def enter(boy, e):
-        print('AutoRun Entered')
         if boy.action == 2:             # 캐릭터가 왼쪽을 바라보고있으면
             boy.dir, boy.action = -1, 0 # 왼쪽으로 움직임
         elif boy.action == 3:           #캐릭터가 오른쪽을 바라보고있으면
@@ -93,13 +92,12 @@ class AutoRun:
         boy.auto_run_start_time = get_time()  # AutoRun 상태 시작 시간 설정
     @staticmethod
     def exit(boy, e):
-        print('AutoRun Exit')
+        pass
 
     @staticmethod
     def do(boy):
-        print('AutoRun Do')
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 10
+        boy.x += boy.dir * 30
 
         canvas_width = get_canvas_width()
 
