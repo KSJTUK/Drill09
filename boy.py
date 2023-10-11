@@ -76,6 +76,7 @@ class Run:
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
 
+
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
@@ -85,6 +86,7 @@ class AutoRun:
     @staticmethod
     def enter(boy, e):
         print('AutoRun Entered')
+        boy.auto_run_start_time = get_time()
     @staticmethod
     def exit(boy, e):
         print('AutoRun Exit')
@@ -94,6 +96,8 @@ class AutoRun:
         print('AutoRun Do')
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
+        if get_time() - boy.auto_run_start_time > 5:
+            boy.state_machine.handle_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(boy):
