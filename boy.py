@@ -3,8 +3,10 @@ from pico2d import load_image, SDL_KEYDOWN, SDL_KEYUP, get_canvas_height, get_ca
     SDLK_RIGHT, SDLK_LEFT, SDLK_a
 import math
 
+
 def key_a_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -76,7 +78,6 @@ class Run:
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
 
-
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
@@ -85,11 +86,12 @@ class Run:
 class AutoRun:
     @staticmethod
     def enter(boy, e):
-        if boy.action == 2:             # 캐릭터가 왼쪽을 바라보고있으면
-            boy.dir, boy.action = -1, 0 # 왼쪽으로 움직임
-        elif boy.action == 3:           #캐릭터가 오른쪽을 바라보고있으면
+        if boy.action == 2:  # 캐릭터가 왼쪽을 바라보고있으면
+            boy.dir, boy.action = -1, 0  # 왼쪽으로 움직임
+        elif boy.action == 3:  # 캐릭터가 오른쪽을 바라보고있으면
             boy.dir, boy.action = 1, 1  # 오른쪽으로 움직임
         boy.auto_run_start_time = get_time()  # AutoRun 상태 시작 시간 설정
+
     @staticmethod
     def exit(boy, e):
         pass
@@ -108,8 +110,8 @@ class AutoRun:
             boy.x = 15
             boy.dir, boy.action = 1, 1
 
-        if get_time() - boy.auto_run_start_time > 5:           # 5초가 지나면
-            boy.state_machine.handle_event(('TIME_OUT', 0))    # TIME_OUT 이벤트를 발생시킨다
+        if get_time() - boy.auto_run_start_time > 5:  # 5초가 지나면
+            boy.state_machine.handle_event(('TIME_OUT', 0))  # TIME_OUT 이벤트를 발생시킨다
 
     @staticmethod
     def draw(boy):
